@@ -29,6 +29,9 @@ int branched= 0;
 
 // int stop = 0;
 
+int cycles = 0;
+int start_cycle_count = 0;
+
 // The op length and timing tables are taken from Shay Green's
 // instruction timing tests.
 
@@ -48,7 +51,7 @@ int op_lengths[0x100] = {
 	1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 	1,1,3,3,3,1,2,1,1,1,3,0,3,3,2,1,
 	1,1,3,0,3,1,2,1,1,1,3,0,3,0,2,1,
-	2,1,1,1,0,1,2,1,2,1,3,0,0,0,2,1,
+	2,1,1,1,0,1,2,1,2,1,3,1,0,0,2,1,
 	2,1,1,1,0,1,2,1,2,1,3,1,0,0,2,1
 };
 
@@ -187,7 +190,7 @@ void (*ops[0x100])(void) = {
   /* DC */ CALL_C, 	LOCKUP,		SBC_A_BYTE,	RST_18,
   /* E0 */ LD_FF_BYTE_A,POP_HL,		LD_FF_C_A, 	DUMP_REG,
   /* E4 */ LOCKUP, 	PUSH_HL,	AND_BYTE,	RST_20,
-  /* E8 */ ADD_SP_OFFSET,JP_HL,		LD_WORD_A, 	LOCKUP,
+  /* E8 */ ADD_SP_OFFSET,JP_HL,		LD_WORD_A, 	CYCLE_COUNT,
   /* EC */ LOCKUP, 	LOCKUP,		XOR_BYTE,	RST_28,
   /* F0 */ LD_A_FF_BYTE,POP_AF,		LD_A_FF_C,	DI,
   /* F4 */ LOCKUP, 	PUSH_AF,	OR_BYTE,	RST_30,
@@ -3007,6 +3010,21 @@ void LD_WORD_A( void )
   state.pc += 3;
 }
 
+
+void CYCLE_COUNT( void )
+{
+  // opcode EB
+  if (start_cycle_count == 0) {
+    start_cycle_count = 1;
+    cycles = 0;
+  } else {
+    printf("Cycle count: %d\n", cycles);
+  }
+
+  state.pc++;
+  return;
+}
+
 void XOR_BYTE( void )
 {
   // opcode EE
@@ -3413,6 +3431,10 @@ void cpu_do_one_instruction()
     {
       state.instr_time = op_times[state.op];
     }
+  }
+
+  if (start_cycle_count == 1) {
+    cycles += state.instr_time;
   }
   
   // Execute the instruction.

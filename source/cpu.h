@@ -371,6 +371,7 @@ void RST_20(void);	// E7
 void ADD_SP_OFFSET(void);	// E8
 void JP_HL(void);	// E9
 void LD_WORD_A(void);	// EA
+void CYCLE_COUNT(void); // EB
 void XOR_BYTE(void);	// EE
 void RST_28(void);	// EF
 void LD_A_FF_BYTE(void);// F0
