@@ -2904,9 +2904,7 @@ void DUMP_REG( void )
   printf("\tsp: 0x%02X\n", state.sp);
   printf("\taf: 0x%02X\n", state.af);
   printf("\tbc: 0x%02X\n", state.bc);
-  printf("%d\n", state.c);
   printf("\tde: 0x%02X\n", state.de);
-  printf("%d\n", state.e);
   printf("\thl: 0x%02X\n", state.hl);
 
   state.pc++;
