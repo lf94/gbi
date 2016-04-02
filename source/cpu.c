@@ -2899,12 +2899,13 @@ void LD_FF_C_A( void )
 void DUMP_REG( void )
 {
   // opcode E3
-  printf("{\n");
+  printf("DUMP_REG:\n");
+  printf("\tpc: 0x%02X\n", state.pc);
+  printf("\tsp: 0x%02X\n", state.sp);
   printf("\taf: 0x%02X\n", state.af);
   printf("\tbc: 0x%02X\n", state.bc);
   printf("\tde: 0x%02X\n", state.de);
   printf("\thl: 0x%02X\n", state.hl);
-  printf("}\n");
 
   state.pc++;
   return;
