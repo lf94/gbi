@@ -48,7 +48,7 @@ int op_lengths[0x100] = {
 	1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 	1,1,3,3,3,1,2,1,1,1,3,0,3,3,2,1,
 	1,1,3,0,3,1,2,1,1,1,3,0,3,0,2,1,
-	2,1,1,0,0,1,2,1,2,1,3,0,0,0,2,1,
+	2,1,1,1,0,1,2,1,2,1,3,0,0,0,2,1,
 	2,1,1,1,0,1,2,1,2,1,3,1,0,0,2,1
 };
 
@@ -185,7 +185,7 @@ void (*ops[0x100])(void) = {
   /* D4 */ CALL_NC, 	PUSH_DE,	SUB_A_BYTE, 	RST_10,
   /* D8 */ RET_CC, 	RETI,		JP_C_ADDR,	LOCKUP,
   /* DC */ CALL_C, 	LOCKUP,		SBC_A_BYTE,	RST_18,
-  /* E0 */ LD_FF_BYTE_A,POP_HL,		LD_FF_C_A, 	LOCKUP,
+  /* E0 */ LD_FF_BYTE_A,POP_HL,		LD_FF_C_A, 	DUMP_REG,
   /* E4 */ LOCKUP, 	PUSH_HL,	AND_BYTE,	RST_20,
   /* E8 */ ADD_SP_OFFSET,JP_HL,		LD_WORD_A, 	LOCKUP,
   /* EC */ LOCKUP, 	LOCKUP,		XOR_BYTE,	RST_28,
@@ -527,6 +527,7 @@ void STOP( void )
 {
   // opcode 10
   printf("STOP\n");
+
 //   state.halt = 1;
   if(state.key1 & 0x01)
   {
@@ -2892,6 +2893,21 @@ void LD_FF_C_A( void )
   return;
 }
 
+void DUMP_REG( void )
+{
+  // opcode E3
+  printf("{\n");
+  printf("\taf: 0x%02X\n", state.af);
+  printf("\tbc: 0x%02X\n", state.bc);
+  printf("\tde: 0x%02X\n", state.de);
+  printf("\thl: 0x%02X\n", state.hl);
+  printf("}\n");
+
+  state.pc++;
+  return;
+}
+
+
 void PUSH_HL( void )
 {
   // opcode E5
@@ -3208,7 +3224,7 @@ void RST_38( void )
   state.pc = 0x0038;
 }
 
-int cpu_init() {
+int cpu_init(int af, int bc, int de, int hl) {
   state.masterClock = 0;
   state.div = 0;
   state.tima = 0;
@@ -3231,17 +3247,17 @@ int cpu_init() {
   
   state.pc = 0x0000;
   state.sp = 0xFFFE;
-  state.b  = 0;
-  state.c  = 0;
-  state.d  = 0;
-  state.e  = 0;
-  state.h  = 0;
-  state.l  = 0;
-  state.a  = 0;
-  state.flag_c = 0;
-  state.flag_h = 0;
-  state.flag_n = 0;
-  state.flag_z = 0;
+  state.b  = bc >> 8;
+  state.c  = bc & 0x0F;
+  state.d  = de >> 8;
+  state.e  = de & 0x0F;
+  state.h  = hl >> 8;
+  state.l  = hl & 0x0F;
+  state.a  = af >> 8;
+  state.flag_c = (af & 0x0F) >> 4;
+  state.flag_h = (af & 0x0F) >> 5;
+  state.flag_n = (af & 0x0F) >> 6;
+  state.flag_z = (af & 0x0F) >> 7;
   RESET_C();
   RESET_H();
   RESET_N();

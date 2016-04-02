@@ -364,6 +364,7 @@ void RST_18(void);	// DF
 void LD_FF_BYTE_A(void);// E0
 void POP_HL(void);	// E1
 void LD_FF_C_A(void);	// E2
+void DUMP_REG(void);	// E3
 void PUSH_HL(void);	// E5
 void AND_BYTE(void);	// E6
 void RST_20(void);	// E7
@@ -410,7 +411,7 @@ void CB_RES_B_HL(void);	// CB 86,8E,96,9E,A6,AE,B6,BE
 void CB_SET_B_R(void);	// CB C0-FF (except (HL))
 void CB_SET_B_HL(void);	// CB C6,CE,D6,DE,E6,EE,F6,FE
 
-int cpu_init( void );
+int cpu_init( int, int, int, int );
 void cpu_do_one_instruction( void );
 void cpu_do_one_frame( void );
 uint8_t* cpu_getReg( int );
