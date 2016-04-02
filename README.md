@@ -1,27 +1,11 @@
-cboy
+gbi (cboy modification)
 ============
 
-cboy is a Game Boy emulator written in C for Linux.
+Dependencies: rgbasm, rgblink, rgbfix, bash, sdl
 
-## Usage
+Usage: ./gbi myfile.asm a bc de hl
 
-```console
-cboy bootrom.bin game.gb
-```
-
-
-## Install
-
-You'll need a compiler and SDL. On Debian, you can install all dependencies with
-```console
-sudo apt-get install build-essential libsdl-dev
-```
-
-Then, to build cboy:
-```console
-cd source
-make
-```
+Building: As with cboy, just run ```make``` in the ```source/``` directory.
 
 
 ## License
