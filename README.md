@@ -5,7 +5,13 @@ Dependencies: rgbasm, rgblink, rgbfix, bash, sdl
 
 Usage: ./gbi myfile.asm a bc de hl
 
-Building: As with cboy, just run ```make``` in the ```source/``` directory.
+## Building
+
+As with cboy, just run ```make``` in the ```source/``` directory.
+
+### Post-build
+
+You can do 1 of 2 things: Either put the rgbds binaries into bin/, or install everything globally. You'll have to do it yourself. gbi by default is configured to work within the bin/ directory.
 
 
 ## License
