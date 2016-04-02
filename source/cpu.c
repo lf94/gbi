@@ -2904,7 +2904,9 @@ void DUMP_REG( void )
   printf("\tsp: 0x%02X\n", state.sp);
   printf("\taf: 0x%02X\n", state.af);
   printf("\tbc: 0x%02X\n", state.bc);
+  printf("%d\n", state.c);
   printf("\tde: 0x%02X\n", state.de);
+  printf("%d\n", state.e);
   printf("\thl: 0x%02X\n", state.hl);
 
   state.pc++;
@@ -3243,7 +3245,7 @@ void RST_38( void )
   state.pc = 0x0038;
 }
 
-int cpu_init(int af, int bc, int de, int hl) {
+int cpu_init() {
   state.masterClock = 0;
   state.div = 0;
   state.tima = 0;
@@ -3266,17 +3268,17 @@ int cpu_init(int af, int bc, int de, int hl) {
   
   state.pc = 0x0000;
   state.sp = 0xFFFE;
-  state.b  = bc >> 8;
-  state.c  = bc & 0x0F;
-  state.d  = de >> 8;
-  state.e  = de & 0x0F;
-  state.h  = hl >> 8;
-  state.l  = hl & 0x0F;
-  state.a  = af >> 8;
-  state.flag_c = (af & 0x0F) >> 4;
-  state.flag_h = (af & 0x0F) >> 5;
-  state.flag_n = (af & 0x0F) >> 6;
-  state.flag_z = (af & 0x0F) >> 7;
+  state.b  = 0;
+  state.c  = 0;
+  state.d  = 0;
+  state.e  = 0;
+  state.h  = 0;
+  state.l  = 0;
+  state.a  = 0;
+  state.flag_c = 0;
+  state.flag_h = 0;
+  state.flag_n = 0;
+  state.flag_z = 0;
   RESET_C();
   RESET_H();
   RESET_N();

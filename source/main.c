@@ -46,18 +46,14 @@ int main ( int argc, char* argv[] ) {
 
   if(argc < 3)
   {
-    fprintf(stderr, "Usage: gbi boot.bin file.gb af bc de hl\n");
+    fprintf(stderr, "Usage: cboy boot.bin game.gb\n");
+    fprintf(stderr, "If you don't have a bootrom, use quickboot.bin.\n");
     exit(1);
   }
 
-  int af = atoi(argv[3]);
-  int bc = atoi(argv[4]);
-  int de = atoi(argv[5]);
-  int hl = atoi(argv[6]);
-
   mem_init();
 //   audio_init();
-  if( ! cpu_init(af, bc, de, hl) )
+  if( ! cpu_init() )
   {
     fprintf( stderr, "cpu init failed\n" );
     return 1;

@@ -1,12 +1,14 @@
 #!/bin/sh
 
-cat head.asm $1 > asm.tmp
+touch args.tmp
+echo "ld a,  $2" >> args.tmp
+echo "ld bc, $3" >> args.tmp
+echo "ld de, $4" >> args.tmp
+echo "ld hl, $5" >> args.tmp
+
+cat head.asm args.tmp $1 > asm.tmp
 
 ./rgbasm -o tmp.o ./asm.tmp && ./rgblink -o ./tmp.gb ./tmp.o && ./rgbfix -p 255 ./tmp.gb
 
-af=$(printf "%d" $2)
-bc=$(printf "%d" $3)
-de=$(printf "%d" $4)
-hl=$(printf "%d" $5)
 ./cboy ./bootrom/bootrom.bin ./tmp.gb $af $bc $de $hl
-rm ./tmp.o ./asm.tmp ./tmp.gb
+rm ./args.tmp ./tmp.o ./asm.tmp ./tmp.gb
